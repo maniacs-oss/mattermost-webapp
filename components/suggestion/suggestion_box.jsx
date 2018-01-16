@@ -306,7 +306,7 @@ export default class SuggestionBox extends React.Component {
             }
         }
 
-        this.getTextbox().focus();
+        this.refs.input.focus();
 
         for (const provider of this.props.providers) {
             if (provider.handleCompleteWord) {
@@ -359,7 +359,7 @@ export default class SuggestionBox extends React.Component {
     }
 
     blur() {
-        this.getTextbox().blur();
+        this.refs.input.blur();
     }
 
     render() {
