@@ -7,7 +7,8 @@ import {Link} from 'react-router';
 
 import TeamStore from 'stores/team_store.jsx';
 
-import {isMobile, getWindowDimensions} from 'utils/utils.jsx';
+import {isMobile} from 'utils/user_agent.jsx';
+import {getWindowDimensions} from 'utils/utils.jsx';
 
 export default class PostTime extends React.PureComponent {
     static propTypes = {
