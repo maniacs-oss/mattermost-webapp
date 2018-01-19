@@ -8,7 +8,6 @@ import {Link} from 'react-router';
 import TeamStore from 'stores/team_store.jsx';
 
 import {isMobile} from 'utils/user_agent.jsx';
-import {getWindowDimensions} from 'utils/utils.jsx';
 
 export default class PostTime extends React.PureComponent {
     static propTypes = {
@@ -43,23 +42,8 @@ export default class PostTime extends React.PureComponent {
         super(props);
 
         this.state = {
-            currentTeamDisplayName: TeamStore.getCurrent().name,
-            ...getWindowDimensions()
+            currentTeamDisplayName: TeamStore.getCurrent().name
         };
-    }
-
-    componentDidMount() {
-        window.addEventListener('resize', this.setDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.setDimensions);
-    }
-
-    setDimensions = () => {
-        this.setState({
-            ...getWindowDimensions()
-        });
     }
 
     renderTimeTag() {
