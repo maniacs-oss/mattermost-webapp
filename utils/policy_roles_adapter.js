@@ -131,14 +131,11 @@ export function rolesFromMapping(mappingValues, roles) {
  * @return {string} the value that the roles/permissions assignment match in the mapping.
  */
 export function mappingValueFromRoles(key, roles) {
-    const iterator = mappingPartIterator(MAPPING[key], roles);
-
-    for (const o of iterator) {
+    for (const o of mappingPartIterator(MAPPING[key], roles)) {
         if (o.allConditionsAreMet) {
             return o.value;
         }
     }
-
     throw new Error(`No matching mapping value found for key '${key}' with the given roles.`);
 }
 
@@ -173,8 +170,8 @@ function mutateRolesBasedOnMapping(mappingKey, value, roles) {
 function roleNamesInMapping() {
     let roleNames = [];
 
-    Object.entries(MAPPING).forEach(([, v1]) => {
-        Object.entries(v1).forEach(([, v2]) => {
+    Object.values(MAPPING).forEach((v1) => {
+        Object.values(v1).forEach((v2) => {
             const names = v2.map((item) => item.roleName); // eslint-disable-line max-nested-callbacks
             roleNames = roleNames.concat(names);
         });
@@ -186,7 +183,6 @@ function roleNamesInMapping() {
 function* mappingPartIterator(mappingPart, roles) {
     for (const value in mappingPart) {
         if (mappingPart.hasOwnProperty(value)) {
-            let allConditionsAreMet = true;
             const roleRules = mappingPart[value];
 
             const hasUnmetCondition = roleRules.some((item) => {
@@ -194,11 +190,7 @@ function* mappingPartIterator(mappingPart, roles) {
                 return (item.shouldHave && !role.permissions.includes(item.permission)) || (!item.shouldHave && role.permissions.includes(item.permission));
             });
 
-            if (hasUnmetCondition) {
-                allConditionsAreMet = false;
-            }
-
-            yield {value, allConditionsAreMet};
+            yield {value, allConditionsAreMet: !hasUnmetCondition};
         }
     }
 }
